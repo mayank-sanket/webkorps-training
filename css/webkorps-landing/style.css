@@ -87,7 +87,7 @@ html, body{
 .nav-container{
     width: 80%;
     margin: auto;
-    border: 1px solid red;
+    /* border: 1px solid red; */
     justify-content: space-between;
     padding: 0.5rem;
 }
