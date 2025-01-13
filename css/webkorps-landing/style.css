@@ -246,6 +246,63 @@ font-weight: 300;
 
 /* clients section end */
 
+
+
+.services2{
+    padding-inline: 8rem;
+    display: flex;
+    justify-content: space-between;
+}
+
+.services2 .bottom-contents .left-titles{
+    padding-block: 2rem;
+    
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.services2 .bottom-contents h2{
+transition: all 0.1s linear;
+}
+
+.services2 .bottom-contents h2:hover{
+    border-left: 4px solid blue;
+    padding-left: 1rem;
+}
+
+
+.services2 img{
+    width: 700px;
+}
+
+.services2 .right{
+    
+    display: flex;
+    
+    gap: 1.5rem;
+    flex-direction: column;
+}
+
+.services2 p{
+    text-align: justify;
+    text-wrap: wrap;
+    /* width: 90%; */
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 .projects{
     margin-top: 2rem;
     padding-inline: 8rem;
@@ -334,6 +391,51 @@ font-weight: 300;
 .projects.bottom-section img{
     width: 200px;
 }
+
+
+.tech h1{
+font-size: 2.5em;
+font-weight: 700;
+}
+
+.tech .top-section{
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+}
+
+.tech .top-section h1{
+    text-wrap: nowrap;
+}
+
+.tech p{
+    text-align: justify;
+    line-height: 24px;
+    font-size: 1.125rem;
+}
+
+
+.tech h4{
+font-size: 1.3rem;
+font-weight: 500;
+margin-bottom: 1.5rem;
+}
+
+.tech .bottom-section {
+    margin-block: 4rem;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 5rem;
+    /* justify-content: space-between; */
+    justify-items: center;
+}
+
+.tech .bottom-section img{
+    width: 3rem;
+    cursor: pointer;
+}
+
+
 .join-wk{
     padding-top: 2rem;
     margin-top: 2rem;
