@@ -166,6 +166,24 @@ width: 50%;
     gap: 3rem;
 }
 
+.btn-main{
+    width: 250px;
+    flex-direction: row;
+    align-items: center;
+    background-color: #11608f;
+    padding-inline: 12px;
+    padding-block: 12px;
+    border-radius: 24px;
+    font-size: 1.3rem;
+    color: white;
+    gap: 1rem;
+}
+
+.btn-main:hover{
+    cursor: pointer;
+    background-color: var(--light-blue);
+}
+
 .hero .left{
     display: flex;
     flex-direction: column;
