@@ -356,16 +356,21 @@ transition: all 0.1s linear;
     padding: 1rem;
 
 }
-
+.overlay h3{
+    text-wrap: nowrap;
+}
 .overlay{
-    background-color: #000;
-    opacity: 0.7;
-    width: 100%;
-    filter: blur(0.125px);
+    background-color: transparent;
+    /* opacity: 0.7; */
+    width: 85%;
+    height: inherit;
+    padding-top: 200px;
+    transform: translateX(10%);
+    /* filter: blur(0.125px); */
     border-bottom-left-radius: 16px;
     border-bottom-right-radius: 16px;
     transition: all 0.5s ease-in-out 1s;
-
+    backdrop-filter: blur(10px);
 }
 
 .overlay h3{
@@ -571,7 +576,9 @@ margin-bottom: 1.5rem;
     cursor: pointer;
 }
 
-
+.footer-div li:hover {
+    color: #469fd4;
+}
 
 
 
