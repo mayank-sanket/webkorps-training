@@ -5,28 +5,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weather App</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 </head>
 <body>
+
+    
+   
     <div class="container">
-        <div class="form-container">
-        
-            <label for="input_city"><h2>Enter City Name</h2></label>
-            <br>
-            <input type="text" name="" id="input_city">
+        <select name="fetch-method" id="dropdown">
+            <option value="notselected" selected>Select Query Type</option>
+            <option value="pin" id="pincodeSearch">By PIN Code</option>
+            <option value="coordinates" id="coordinatesSearch" >By Coordinates</option>
+            <option value="city"  id="citySearch" >By City Name</option>
+        </select>
+
+        <div>
             <button id="request_btn">Search</button>
+        </div>
+        <div class="form_container">
+        
+           
         
         </div>
 
         <div class="details-container" id="details_container">
-            <h1 class="city" id="city"></h1> 
-            <h2 class="condition" id="condition"></h2>
-            <h2 class="temp-actual" id="temp_actual"></h2>
-            <h2 class="temp" id="temp"></h2>
-
-            <img src="" alt="" id="weather_icon">
+            
 
         </div>
     </div>
     <script src="script.js"></script>
+
+
+   
 </body>
 </html>
