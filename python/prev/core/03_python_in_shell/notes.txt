@@ -1,0 +1,40 @@
+In windows: IDLE | or in cmd : use "python" command
+In mac: use "python3" command
+
+
+running code directly (generally used for testing small code pieces)
+------------------
+press ctrl + D or ctrl + Z to come out of the shell
+
+----
+NOTE: if you want to import other modules (built-in modules) then you use the syntax : import module_name
+
+
+eg: 
+import os
+
+os.getcwd()      | PRINTS THE CURRENT WORKING DIRECTORY
+
+______________
+import sys
+sys.platform    | prints 'win32' in Windows systems and 'darwin' in MacOS
+
+__________________________________________________________
+
+if you want to import other modules which are not built-in, then it looks first in the current directory, if not  found then it looks in other directories
+
+__________________________________________________________
+
+if you want to use the functionalities of some modules the use the . operator (dot operator)
+
+__________________________________________________________
+
+suppose you imoprted a file into another file and did some things but after a while, you decided to update the file which you imported, then in this case the new functionalities will not reflect in the source file without importing the file again or without closing the shell
+
+to do so, use this
+
+from importlib import reload
+reload(modulename)
+
+
+__________________________________________________________
