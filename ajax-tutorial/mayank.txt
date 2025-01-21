@@ -1,0 +1,5 @@
+This text is being used to test fetching of data using xhr
+
+line 2
+
+line 3
