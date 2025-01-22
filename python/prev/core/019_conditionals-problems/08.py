@@ -11,4 +11,4 @@ elif length <= 10:
 else: 
     strength = "strong"
 
-print(f'password is {strength}.')    
+print(f'password is {strength}.') 

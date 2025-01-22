@@ -20,7 +20,7 @@ price = 59000
 txtres = f"The price is {price:,} dollars"
 print(txtres)
 
-# multiple formatters, such as :b  :> :+    etc (w3schools)
+# multiple formatters, such as :b  :> :+    etc (w3schools) | refer for more details
 
 
 
@@ -35,7 +35,7 @@ print(txt)
 # -----------------------------------------
 
 
-# OLDDER SYNTAX (before python 3.6)
+# OLDER SYNTAX (before python 3.6)
 
 price = 49
 txt = "The price is {} dollars"
@@ -72,4 +72,4 @@ print(txt.format(age, name))
 # Named Indexes
 
 myorder = "I have a {carname}, it is a {model}."
-print(myorder.format(carname = "Ford", model = "Mustang"))
+print(myorder.format(model = "Mustang", carname = "Ford")) # order does not matter

@@ -1,3 +1,5 @@
+# refer to docs for types of errors and exceptions in python
+
 try:
   print(x) # try block generates an error because x is not defined
 except:

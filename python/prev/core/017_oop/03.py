@@ -3,11 +3,6 @@ class Car:
         self.brand = brand
         self.model = model
 
-
-
-
-  
-
     def fullName(self):
         return f"{self.brand} {self.model}"
 
