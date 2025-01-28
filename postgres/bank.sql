@@ -445,3 +445,392 @@ from bank_employees
 group by salary_category;
 
 
+-------------------------------------------------------------------
+
+-- STORED ROUTINE 
+-- an sql statement or a set of sql statements 
+-- that can be stored on database server which can be 
+-- called number of times
+
+-- it has two types:
+	-- 1. stored procedure
+	-- 2. user defined functions
+
+-- 1. STORED PROCEDURE : set of sql statements and procedural
+-- logic that can perform operations such as inserting, 
+-- updating, deleting, and querying data
+			 
+			--  syntax
+
+			-- create or replace procedure procedure_name (parameter_name parameter_type, ...)
+			-- language plpgsql
+			-- as $$
+			-- begin 
+			     --- procedural code here
+			-- end;
+			-- $$;
+
+-- eg 
+
+create or replace procedure update_emp_salary(
+	p_employee_id int,
+	p_new_salary numeric
+)
+
+language plpgsql
+as $$
+begin
+	update bank_employees
+	set salary = p_new_salary
+	where emp_id = p_employee_id;
+end; 
+$$;
+
+
+-- using this stored procedure
+
+call update_emp_salary(3, 71000);
+
+
+-- task: create a stored procedure for insert operation
+
+-- solution:
+
+-- first create stored procedure
+
+create or replace procedure add_employee(
+	p_fname varchar,
+	p_lname varchar,
+	p_email varchar,
+	p_dept varchar,
+	p_salary numeric
+)
+
+language plpgsql
+as $$
+begin  
+insert into bank_employees (fname, lname, email, dept, salary) 
+values (p_fname, p_lname, p_email, p_dept, p_salary);
+end;
+$$
+
+
+-- to use it, use the call keyword alongwith the name and parameters
+
+call add_employee ('mayank', 'sanket', 'm@gmail.com', 232323.00);
+-------------
+
+-- 2. USER DEFINED FUNCTIONS: custom function created by the user to perform specific operations and return a value
+
+		-- syntax:
+		-- create or replace function function_name(parameters) 
+		-- returns return_type as $$
+		-- begin
+		      -- fxn body (sql statements)
+			-- return some_value;    (for scalar functions)
+		-- end;
+		-- $$ language plpgsql;
+
+
+
+
+-- application of user defined function
+
+-- eg: find the name of the employees in each department having maximum salary
+
+
+create or replace function dept_max_sal_emp(dept_name varchar)
+returns table(emp_id int, fname varchar, salary numeric)
+as $$
+BEGIN
+return query
+select
+e.emp_id, e.fname, e.salary
+from 
+bank_employees e 
+where e.dept = dept_name
+and e.salary = (
+	select max(emp.salary)
+	from employees emp
+	where emp.dept = dept_name
+);
+end;
+$$ language plpgsql;
+
+
+-- using the function
+select * from dept_max_sal_emp('HR');
+
+
+
+
+-------------------------------------------------------------------------------------------
+
+----- WINDOW FUNCTIONS
+-- window functions, also known as analytic functions allow you to perform calculations across
+-- a set of of rows related to the current row
+
+-- defined by an over() clause
+
+
+-- eg:
+select fname,
+sum(salary) over()
+from bank_employees;
+
+-- this displays the first names in 1st col and total salary of all emp in 2nd col
+
+
+select fname, salary,
+sum(salary) over()
+from bank_employees; -- fname, salary, total employees' salary
+
+
+-- controlling over() clause
+
+select fname, salary,
+sum(salary) over(order by salary)
+from bank_employees; -- fname, salary, cumulative sum of salaries in ascending order
+
+
+select row_number()  over(order by fname),
+fname, dept, salary
+from bank_employees;
+
+
+
+select row_nummber() over(PARTITION BY dept),   -- PARTITION BY is similar to group by when used with an over() clause
+fname, dept, salary
+from bank_employees; -- rows start from 1 and end to n for the same dept and again start with 1 and end to m for the other dept
+
+-- benefits of window functions
+
+-- Advanced Analytics: They enable complex calculations like running totals, moving averages, rank calculations, and cumulative distributions.
+
+
+-- Non-Aggregating: Unlike aggregate functions, window functions do not collapse rows. This means you can calculate aggregates while retaining individual row details.
+
+
+-- Flexibility: They can be used in various clauses of SQL, such as SELECT, ORDER BY, and HAVING, providing a lot of flexibility in writing queries.
+
+
+
+-- note: other than row_number() there are many like, rank(), dense_rank(), lag(), lead()
+
+select fname, salary,
+rank() over(order by salary desc)
+from bank_employees;  -- 1, 1, 3 type rank
+
+
+select fname, salary,
+dense__rank() over(order by salary desc)
+from bank_employees; -- 1, 1, 2, 3 type rank
+
+-- lag (peechhe)
+
+select fname, salary,
+lag(salary) over()
+from bank_employees;
+ -- karke dekh lo kya hota hai
+
+
+select fname, salary,
+lead(salary) over()
+from bank_employees; -- karke dekh lo kya hota hai
+
+
+---------------------------------------------------------------------------------------------
+
+
+--- CTE: Common Table Expression
+
+-- CTE (Common Table Expression) is a temporary result set that you can define within a query to simplify complex SQL statements.
+
+
+-- ------------ syntax----------------
+with cte_name (optional_column_list) as (
+	-- cte definition
+	select ...
+)
+
+-- main query referencing the cte
+
+select ... from cte_name
+where ...;
+
+
+----------------
+
+
+
+-- use case 1: 
+
+
+
+
+-- We want to calculate the average salary per department and then find all employees whose salary is above the average salary of their department.
+
+
+WITH AvgSal AS (
+
+    SELECT 
+
+        dept,  AVG(salary) AS avg_salary     FROM   bank_employees
+
+    GROUP BY 
+
+        dept
+
+)
+
+
+
+SELECT 
+
+    e.emp_id,     e.fname,     e.dept,     e.salary, 
+
+    a.avg_salary
+
+FROM 
+
+    bank_employees e
+
+JOIN 
+
+    AvgSal a ON e.dept = a.dept
+
+WHERE 
+
+    e.salary > a.avg_salary;
+
+
+-- note: this is not stored
+
+-- it is like: create cte and immediately use it
+
+--------------------------------------------------------------------
+
+-- Use Cases - 2
+
+
+
+-- We want to find the highest-paid employee in each department.
+
+
+WITH HighestPaid AS (
+
+    SELECT 
+
+        dept, 
+
+        MAX(salary) AS max_salary
+
+    FROM 
+
+        bank_employees
+
+    GROUP BY 
+
+        dept
+
+)
+
+SELECT 
+
+    e.emp_id, 
+
+    e.fname, 
+
+    e.lname, 
+
+    e.desig, 
+
+    e.dept, 
+
+    e.salary
+
+FROM 
+
+    employees e
+
+JOIN 
+
+    HighestPaid h ON e.dept = h.dept AND e.salary = h.max_salary;
+
+
+
+-- Points:
+
+-- Once CTE has been created it can only be used once. It will not be persisted.
+------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+--------------------------------------------------------------------------------------------------
+
+
+
+-- TRIGGERS :Triggers are special procedures in a database that automatically execute predefined actions in response to certain events on a specified table or view.
+
+
+-- syntax: 
+
+create trigger trigger_name
+{before | after | instead of} {insert | update | delete | truncate } 
+on table_name
+for each {row | statement}
+execute function trigger_function_name();
+
+
+
+-- function def
+
+create or replace function trigger_function_name()
+returns trigger as $$
+BEGIN 
+   -- logic here
+  return new;
+end;
+$$ language plpgsql;
+
+
+
+
+-- use case:  create a trigger so that if we insert/update negative salary in a table, it will be triggered and set it to 0
+
+
+-- defining the function
+create or replace function check_salary()
+returns trigger as $$
+BEGIN
+if new.salary < 0 then
+new.salary = 0;
+end if;
+return new;
+end;
+$$ language plpgsql;
+
+-- creating the trigger
+
+create trigger before_update_salary
+before update on bank_employees
+for each row
+execute function check_salary();
+
+
+
+-- let's try this by updating values in the table (this time we are using stored procedure that we earlier defined)
+
+call update_emp_salary(1, -60000);
+
+
+
+-- ------------------------------------------------------------------
+
+
+-- more to study
+
+--1. cascade on delete
