@@ -10,3 +10,9 @@
 
 - single connection establishment
 - super 
+
+
+
+# different types of cursors implementations in psycopg2
+
+

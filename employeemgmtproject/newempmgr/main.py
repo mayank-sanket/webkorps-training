@@ -13,9 +13,9 @@ def main():
         print("5. Exit")
 
         
-        choice = int(input(input("Enter choice: ")))
-
-        if choice == 1:
+        print('\n')
+        choice = input("Enter your choice: \n")
+        if choice == "1":
             name = input("Enter name: ")
             age = int(input("Enter age: "))
             department = input("Enter department: ")
@@ -23,12 +23,12 @@ def main():
             email = input('Enter email: ')
             manager.add_employee(name, age, department, salary, email)
 
-        elif choice == 2:
+        elif choice == "2":
 
             manager.view_employees()
             
 
-        elif choice == 3:
+        elif choice == "3":
             emp_id = int(input("Enter Employee ID to update: "))
             name = input("Enter new name: ")
             age = int(input("Enter new age: "))
@@ -37,11 +37,11 @@ def main():
             email = input("Enter the new email: ")
             manager.update_employee(emp_id, name, age, department, salary, email)
 
-        elif choice == 4:
+        elif choice == "4":
             emp_id = int(input("Enter Employee ID to delete: "))
             manager.delete_employee(emp_id)
 
-        elif choice == 5:
+        elif choice == "5":
             manager.close()
             print("Exiting...")
             break
