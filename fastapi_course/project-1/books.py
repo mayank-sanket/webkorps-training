@@ -37,9 +37,6 @@ async def read_book(book_title: str):
 # request url: 127.0.0.1:8000/books/title%20four     #    %20 means space
 
 
-
-
-
 # @app.get("/books/mybook")
 # async def read_all_books():
 #     return {"book title": "my favourite book"}
