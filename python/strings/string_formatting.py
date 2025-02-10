@@ -2,7 +2,6 @@ age = int(input('enter your age: '))
 salary = int(input('enter your salary: '))
 
 
-
 # earlier syntax: .format()
 
 # F-String (python 3.6 onwards) | use of placeholders and modifiers
@@ -73,3 +72,7 @@ print(txt.format(age, name))
 
 myorder = "I have a {carname}, it is a {model}."
 print(myorder.format(model = "Mustang", carname = "Ford")) # order does not matter
+
+
+tsttxt = "I have a {carname}, it is a {model}".format(model = "Swfit Dzire", carname = "Maruti Suzuki")
+print(tsttxt)

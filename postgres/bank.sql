@@ -88,7 +88,7 @@ select * from bank_employees;
 
 
 -- CLAUSES
-	--WHERE
+	-- WHERE
 	-- DISTINCT
 	-- ORDERY BY
 	-- LIMIT

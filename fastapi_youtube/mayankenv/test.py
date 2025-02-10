@@ -14,10 +14,10 @@ def root():
 
 
 @app.post("/createpost")
-def create_post(turtle: dict = Body(...)):
-    posts.append(turtle)
+def create_post(mayank: dict = Body(...)):
+    posts.append(mayank)
     print(posts)
-    return {f'Post created, {turtle["title"]}, {turtle["content"]}'}
+    return {f'Post created, {mayank["title"]}, {mayank["content"]}'}
 
 
 @app.get('/{id}')

@@ -16,6 +16,7 @@ alter table person
 add column age int; -- adds one column age with int data type
 
 select * from person; -- displays all data (age is null)
+
 alter table person
 drop column age; -- removes the age column
 

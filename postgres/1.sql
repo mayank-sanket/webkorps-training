@@ -143,7 +143,7 @@ select * from bank_employees where fname like '%i%'; -- fname contains letter 'i
 select * from bank_employees where fname like '_a%' -- fname has second character 'a'
 
 -- case insensitivity in like
-select * from bank_employees where fname ilike '%rahul%' -- fname contains 'john' (case insensitive)
+select * from bank_employees where fname ilike '%rahul%' -- fname contains 'rahul' (case insensitive)
 
 
 -- Q: find those departments which contain only 2 characters
@@ -325,5 +325,4 @@ select length(trim('           alright        ')); -- 7
 select position ('om' in 'Thomas'); -- 3
 select position ('Om' in 'Thomas'); -- 0
 
--- start from 4hr:40 min
 

@@ -94,4 +94,4 @@ sudo nano /etc/postgresql/<version>/main/pg_hba.conf (replace version with your 
 
 sudo -u postgres psql
 
-ALTER USER POSTGRES PASSWORD 'your_new_password'
+ALTER USER postgres WITH PASSWORD 'your_new_password'
