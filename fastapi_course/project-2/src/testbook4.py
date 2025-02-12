@@ -1,4 +1,4 @@
-# motive: implementing starlette (for better HTTPExceptions : explicit HTTP exceptions on API endpoints)
+# motive: implementing HTTPExceptions
 
 
 from fastapi import FastAPI, Body, Path, Query, HTTPException
@@ -7,9 +7,6 @@ from fastapi import FastAPI, Body, Path, Query, HTTPException
 # Importted HTTPException for raising HTTPExceptions
 from typing import  Optional
 from pydantic import BaseModel, Field
-
-from starlette import status   # no installation required
-
 
 app = FastAPI()
 
@@ -74,19 +71,19 @@ Book(7, 'Get Epic Shit Done', 'Ankur Warikoo', 'Another great book by Ankur Wari
 
 
 
-@app.get("/", status_code=status.HTTP_200_OK)
+@app.get("/")
 async def index():
     return {"message": "Welcome to the page!"}
 
 
-@app.get("/books", status_code=status.HTTP_200_OK)
+@app.get("/books")
 async def read_all_books():
     return BOOKS
 
 
         
 
-@app.get("/books/publish", status_code=status.HTTP_200_OK)   # assignment solution
+@app.get("/books/publish")   # assignment solution
 async def books_by_publish_date(published_date: int = Query(gt=1900, lt=2400)):
     books_to_return = []
     for book in BOOKS:
@@ -96,7 +93,7 @@ async def books_by_publish_date(published_date: int = Query(gt=1900, lt=2400)):
 
 
 # validation inside path parameter
-@app.get("/books/{book_id}", status_code=status.HTTP_200_OK)
+@app.get("/books/{book_id}")
 async def show_book_by_id(book_id: int = Path(gt=0, lt=100)):
     for book in BOOKS:
         if book.id == book_id:
@@ -106,7 +103,7 @@ async def show_book_by_id(book_id: int = Path(gt=0, lt=100)):
 
 # fetching book by query parameter id
 
-@app.get("/books/", status_code=status.HTTP_200_OK)   # here the order does not cause much harm as this endpoint uses query parameter
+@app.get("/books/")   # here the order does not cause much harm as this endpoint uses query parameter
 async def show_book_by_rating(rating:int = Query(lt=6, gt=-1)):
     books_to_return = []
     for book in BOOKS: 
@@ -126,7 +123,7 @@ async def show_book_by_rating(rating:int = Query(lt=6, gt=-1)):
 
 # the above part also works, but the below is better:
 
-@app.post("/create-book",  status_code=status.HTTP_201_CREATED)
+@app.post("/create-book")
 async def create_book(book_request: BookRequest):
     new_book = Book(**book_request.model_dump()) # (pydantic version 2)                    # in pydantic version 1, .dict() is used instead of model_dump()
     # print(type(new_book))  # < class 'books.Book'>
@@ -146,7 +143,7 @@ def find_book_id(book: Book):   # not async     (for auto-increment of IDs)
 
 
 
-@app.put("/books/update_book", status_code=status.HTTP_204_NO_CONTENT)
+@app.put("/books/update_book")
 async def update_book(book:BookRequest):
     book_changed = False
     for i in range(len(BOOKS)):
@@ -162,7 +159,7 @@ async def update_book(book:BookRequest):
 
 
 # validating path parameter
-@app.delete("/books/{book_id}", status_code=status.HTTP_204_NO_CONTENT)
+@app.delete("/books/{book_id}")
 async def delete_book_by_id(book_id:int = Path(gt=0, lt=100)):
     book_changed = False
     for i in range(len(BOOKS)):
@@ -176,7 +173,3 @@ async def delete_book_by_id(book_id:int = Path(gt=0, lt=100)):
 
 
 
-
-
-#note: after a successful delete or put request, if you use status code 200, then there is a response body which is null
-# but if you use status code 204, then there is no response body, just the status
