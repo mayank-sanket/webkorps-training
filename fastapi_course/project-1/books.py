@@ -18,13 +18,16 @@ async def index():    # async is optional for fastapi
     }
 
 # api-endpoints
-# order matters with path parameters
+# order of placement (of api endpoints) matters with path parameters
 
 # path parameters
 
 @app.get("/books")
 async def read_all_books():
+    
+
     return BOOKS
+    
 
 
 
