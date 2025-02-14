@@ -24,8 +24,6 @@ async def index():    # async is optional for fastapi
 
 @app.get("/books")
 async def read_all_books():
-    
-
     return BOOKS
     
 
@@ -72,7 +70,7 @@ async def read_book(book_title: str):
 #query parameters:
 
 
-@app.get("/books/")    # /book is a path param
+@app.get("/books/")    
 async def read_category_by_query(category: str):   # category is a query
     books_to_return = []
     for book in BOOKS:
@@ -128,9 +126,6 @@ async def delete_book(book_title: str):
         if book_title.casefold() == BOOKS[i].get('title').casefold():
             BOOKS.pop(i)
             break
-
-
-
 
 
 # assignment: create a new API endpoint that can fetch all books from a specific author using either path parameter or query parameter
