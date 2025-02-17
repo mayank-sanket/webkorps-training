@@ -20,13 +20,13 @@ async def index():    # async is optional for fastapi
 # api-endpoints
 # order of placement (of api endpoints) matters with path parameters
 
-# path parameters
 
 @app.get("/books")
 async def read_all_books():
     return BOOKS
     
 
+# path parameters
 
 
 @app.get("/books/{book_title}")
@@ -62,9 +62,6 @@ async def read_book(book_title: str):
         if book.get('title').casefold() == book_title.casefold():
             return book
         
-
-
-
 
 
 #query parameters:
