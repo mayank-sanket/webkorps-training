@@ -7,9 +7,7 @@ from sqlalchemy.orm import Session
 from starlette import status
 from pydantic import BaseModel, Field
 
-
 app = FastAPI()
-
 models.Base.metadata.create_all(bind=engine)   # this happens only if the todos.db file does not exist. If it already exists, then delete it when running the server| better handling is done with migration libraries (not meant for now) | Migration in Alembic Section of the Course
 
 
@@ -20,10 +18,9 @@ models.Base.metadata.create_all(bind=engine)   # this happens only if the todos.
 # could have used async function also
 def get_db():
     db = SessionLocal()
-    
+
     try: 
-        yield db
-    
+        yield db 
 # only the code prior to and including the yield statement is executed before sending a response
 # code following the yield statement is executed after the response is delivered
 
@@ -31,11 +28,6 @@ def get_db():
     # after response
     finally:
         db.close()
-
-
-
-
-
 
 
 # --------------------------------------------------------------------------------------------------------------------
@@ -50,12 +42,11 @@ class TodoRequest(BaseModel):
     priority: int = Field (gt=0, lt=6)
     completed: bool
 
-
 # creating async api endpoints
 
-@app.get("/",  status_code=status.HTTP_200_OK )                                          
-# dependency injection 
+@app.get("/",  status_code=status.HTTP_200_OK )    
 
+# dependency injection 
 async def read_all(db: db_dependency):    # Depends(get_db)
     return db.query(Todos).all()
     
