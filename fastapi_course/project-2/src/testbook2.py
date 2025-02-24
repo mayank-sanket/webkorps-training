@@ -1,11 +1,7 @@
 from fastapi import FastAPI, Body
 from typing import Optional
 from pydantic import BaseModel, Field
-
 app = FastAPI()
-
-
-
 class Book:
     id: int
     title: str
@@ -13,7 +9,6 @@ class Book:
     description: str
     rating: int
     published_date: int
-
 
     def __init__(self, id, title, author, description, rating, published_date):
         self.id = id
@@ -23,10 +18,7 @@ class Book:
         self.rating = rating
         self.published_date = published_date
 
-
-
 class BookRequest(BaseModel):
-    # id: Optional[int] = None           # made it optional so that even if it is not passed, it does not create an error
     id: int = Field(description='ID is not needed on create', default=None) # added field validation as well as optional type
     title: str = Field(min_length=3)
     author: str = Field(min_length=1)
@@ -34,11 +26,7 @@ class BookRequest(BaseModel):
     rating: int = Field(gt=-1, lt=6)  # 0 to 5
     published_date: int = Field(gt=-1, lt=20400)   
 
-
-
-
-    # model_config  (for swagger docs example section)
-
+# model config for Swagger Docs (Custom)
     model_config = {
         "json_schema_extra": {
             "example": {
@@ -50,7 +38,6 @@ class BookRequest(BaseModel):
         }
     }
 
-
 BOOKS = [
 Book(1, 'Computer Science Pro', 'Mayank Sanket', 'A book which teaches you Computer Science from beginner level to advanced level', 5, 2021),
 Book(2, 'Our World Then and Now', 'Samir Sharma', 'History book ', 4, 2023), 
@@ -59,11 +46,7 @@ Book(4, 'Physics Volume 1', 'HC Verma', 'Used by millions of students preparing 
 Book(5, 'Algebra', 'G Tewani', 'A mathematics book of the famous series by G Tewani', 4, 2010),
 Book(6, 'Do Epic Shit', 'Ankur Warikoo', 'A great book by Ankur Warikoo', 4, 2020),
 Book(7, 'Get Epic Shit Done', 'Ankur Warikoo', 'Another great book by Ankur Warikoo', 4, 2019)
-
 ]
-
-
-
 
 @app.get("/")
 async def index():
@@ -86,17 +69,15 @@ async def books_by_publish_date(published_date: int):
     return books_to_return
 
 
-# fetching book by path parameter id (dynamic)
 @app.get("/books/{book_id}")
 async def show_book_by_id(book_id: int):
     for book in BOOKS:
-        if book.id == book_id:
+        if book.id == book_id:                  # book.id instead of book.get('id) because we are using class objects and not some list with dictionary elements
             return book
-    
 
 # fetching book by query parameter id
 
-@app.get("/books/")   # here the order does not cause much harm as this endpoint uses query parameter
+@app.get("/books/")   # here the order (see the above endpoint) does not cause much harm as this endpoint uses query parameter
 async def show_book_by_rating(rating:int):
     books_to_return = []
     for book in BOOKS: 
@@ -110,7 +91,7 @@ async def show_book_by_rating(rating:int):
 
 # @app.post("/create-book")
 # async def create_books(book_request: BookRequest):
-#     print(type(book_request))              # class <class 'books.BookRequest'>
+#     print(type(book_request))              # class <class 'testbook2.BookRequest'>
 #     BOOKS.append(book_request)  
 
 
@@ -118,8 +99,11 @@ async def show_book_by_rating(rating:int):
 
 @app.post("/create-book")
 async def create_book(book_request: BookRequest):
-    new_book = Book(**book_request.model_dump()) # (pydantic version 2)                    # in pydantic version 1, .dict() is used instead of model_dump()
-    # print(type(new_book))  # < class 'books.Book'>
+    
+    #OBSERVE this
+    new_book = Book(**book_request.model_dump()) # (pydantic version 2) | in pydantic version 1, .dict() is used instead of model_dump()
+    # print(type(new_book))  # < class 'testbook2.Book'>
+    
     BOOKS.append(find_book_id(new_book))
 
 
@@ -133,9 +117,6 @@ def find_book_id(book: Book):   # not async     (for auto-increment of IDs)
     return book
 
 
-
-
-
 @app.put("/books/update_book")
 async def update_book(book:BookRequest):
     for i in range(len(BOOKS)):
@@ -143,8 +124,6 @@ async def update_book(book:BookRequest):
             BOOKS[i] = book
         
         # but how to handles those ids which don't exist but the user wants to update
-
-
 
 @app.delete("/books/{book_id}")
 async def delete_book_by_id(book_id:int):

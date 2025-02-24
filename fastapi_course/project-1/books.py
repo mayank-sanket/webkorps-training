@@ -1,6 +1,5 @@
 from fastapi import FastAPI, Body
 app = FastAPI()
-
 BOOKS = [
     {'title': 'Title One', 'author': 'Author One', 'category': 'science'},
     {'title': 'Title Two', 'author': 'Author Two', 'category': 'science'},
@@ -9,26 +8,20 @@ BOOKS = [
     {'title': 'Title Five', 'author': 'Author Five', 'category': 'math'},
     {'title': 'Title Six', 'author': 'Author Two', 'category': 'math'}
 ]
-
 @app.get("/")
 async def index():    # async is optional for fastapi
-
     return {
-        "message": "Hello, Mayank"
+        "message": "Hello, Mayank!"
     }
 
 # api-endpoints
-# order of placement (of api endpoints) matters with path parameters
-
-
 @app.get("/books")
 async def read_all_books():
     return BOOKS
-    
+
+# order of placement (of api endpoints) matters with path parameters
 
 # path parameters
-
-
 @app.get("/books/{book_title}")
 async def read_book(book_title: str):
     for book in BOOKS:
@@ -49,12 +42,9 @@ async def read_book(book_title: str):
 
 # @app.get("/books/mybook") # static parameter
 # async def read_all_books():
-#     return {"book title": "My favourite book"}   # note : it still returns {"dynamic param": dynamic param}  because it behves like dynamic param due to placement of code block
+#     return {"book title": "My favourite book"}   # note : it still returns {"dynamic param": mybook}  because it behves like dynamic param due to placement of code block
 
 # therefore, place this above the dynamic path parameter 
-
-
-
 
 @app.get("/books/{book_title}")
 async def read_book(book_title: str):
@@ -62,10 +52,7 @@ async def read_book(book_title: str):
         if book.get('title').casefold() == book_title.casefold():
             return book
         
-
-
 #query parameters:
-
 
 @app.get("/books/")    
 async def read_category_by_query(category: str):   # category is a query
@@ -85,6 +72,9 @@ async def read_books_by_author(author:str): # author is passed via query
             books_to_return.append(book)
     return books_to_return
 
+
+# combination of path and query parameter
+
 @app.get("/books/{book_author}/")
 async def read_author_category_by_query(book_author: str, category: str):
     books_to_return = []
@@ -92,29 +82,21 @@ async def read_author_category_by_query(book_author: str, category: str):
         if book.get('author').casefold() == book_author.casefold() and \
         book.get('category').casefold() == category.casefold():
             books_to_return.append(book)
-    
     return books_to_return
 
-
-
 # get request do not  have a body
-
 # a post request has a body
-
 # to send request body, you need to import Body from fastapi
 
 @app.post("/books/create_book")
 async def create_book(new_book = Body()):
     BOOKS.append(new_book)    
 
-
-
 @app.put("/books/update_book")
 async def update_book(updated_book = Body()):
     for i in range(len(BOOKS)):
         if BOOKS[i].get('title').casefold() == updated_book.get('title').casefold():
             BOOKS[i] = updated_book
-
 
 
 @app.delete("/books/delete_book/{book_title}")
@@ -124,16 +106,7 @@ async def delete_book(book_title: str):
             BOOKS.pop(i)
             break
 
-
 # assignment: create a new API endpoint that can fetch all books from a specific author using either path parameter or query parameter
-
-
-
-
-
-
-
-
 
 
 # path parameter
@@ -158,6 +131,4 @@ async def read_books_by_author_path (author: str):
 #             books_to_return.append(book)
 #     return books_to_return
 
-
-
-# note: good practice: keep smaller api endpoints at the front of the code
+# note: good practice: keep smaller api endpoints at the front of the code | also, place static endpoints at the starting

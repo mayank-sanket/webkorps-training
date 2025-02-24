@@ -1,13 +1,7 @@
 from fastapi import FastAPI, Body, Path, Query
-# Imported Path to validate Path parameters
-# Imported Query to validate Query parameters
 from typing import  Optional
 from pydantic import BaseModel, Field
-
 app = FastAPI()
-
-
-
 class Book:
     id: int
     title: str
@@ -15,7 +9,6 @@ class Book:
     description: str
     rating: int
     published_date: int
-
 
     def __init__(self, id, title, author, description, rating, published_date):
         self.id = id
@@ -25,21 +18,13 @@ class Book:
         self.rating = rating
         self.published_date = published_date
 
-
-
 class BookRequest(BaseModel):
-    # id: Optional[int] = None           # made it optional so that even if it is not passed, it does not create an error
-    id: int = Field(description='ID is not needed on create', default=None) # added field validation as well as optional type
+    id: int = Field(description='ID is not needed on create', default=None) 
     title: str = Field(min_length=3)
     author: str = Field(min_length=1)
     description: str = Field(min_length=1, max_length=300)
-    rating: int = Field(gt=-1, lt=6)  # 0 to 5
+    rating: int = Field(gt=-1, lt=6) 
     published_date: int = Field(gt=1990, lt=2400)   
-
-
-
-
-    # model_config  (for swagger docs example section)
 
     model_config = {
         "json_schema_extra": {
@@ -65,21 +50,15 @@ Book(7, 'Get Epic Shit Done', 'Ankur Warikoo', 'Another great book by Ankur Wari
 ]
 
 
-
-
 @app.get("/")
 async def index():
     return {"message": "Welcome to the page!"}
-
 
 @app.get("/books")
 async def read_all_books():
     return BOOKS
 
-
-        
-
-@app.get("/books/publish")   # assignment solution
+@app.get("/books/publish")   # 
 async def books_by_publish_date(published_date: int = Query(gt=1900, lt=2400)):
     books_to_return = []
     for book in BOOKS:
@@ -88,15 +67,12 @@ async def books_by_publish_date(published_date: int = Query(gt=1900, lt=2400)):
     return books_to_return
 
 
-# validation inside path parameter
 @app.get("/books/{book_id}")
 async def show_book_by_id(book_id: int = Path(gt=0, lt=100)):
     for book in BOOKS:
         if book.id == book_id:
             return book
     
-
-# fetching book by query parameter id
 
 @app.get("/books/")   # here the order does not cause much harm as this endpoint uses query parameter
 async def show_book_by_rating(rating:int = Query(lt=6, gt=-1)):
@@ -107,12 +83,9 @@ async def show_book_by_rating(rating:int = Query(lt=6, gt=-1)):
     return books_to_return
         
 
-
-
-
 # @app.post("/create-book")
 # async def create_books(book_request: BookRequest):
-#     print(type(book_request))              # class <class 'books.BookRequest'>
+#     print(type(book_request))              # class <class 'testbook3.BookRequest'>
 #     BOOKS.append(book_request)  
 
 
@@ -135,9 +108,6 @@ def find_book_id(book: Book):   # not async     (for auto-increment of IDs)
     return book
 
 
-
-
-
 @app.put("/books/update_book")
 async def update_book(book:BookRequest):
     for i in range(len(BOOKS)):
@@ -145,8 +115,6 @@ async def update_book(book:BookRequest):
             BOOKS[i] = book
         
         # but how to handles those ids which don't exist but the user wants to update
-
-
 
 # validating path parameter
 @app.delete("/books/{book_id}")

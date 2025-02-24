@@ -1,16 +1,9 @@
-# motive: implementing HTTPExceptions
-
+# motive: implementing HTTPExceptions (general)
 
 from fastapi import FastAPI, Body, Path, Query, HTTPException
-# Imported Path to validate Path parameters
-# Imported Query to validate Query parameters
-# Importted HTTPException for raising HTTPExceptions
 from typing import  Optional
 from pydantic import BaseModel, Field
-
 app = FastAPI()
-
-
 
 class Book:
     id: int
@@ -19,7 +12,6 @@ class Book:
     description: str
     rating: int
     published_date: int
-
 
     def __init__(self, id, title, author, description, rating, published_date):
         self.id = id
@@ -32,18 +24,12 @@ class Book:
 
 
 class BookRequest(BaseModel):
-    # id: Optional[int] = None           # made it optional so that even if it is not passed, it does not create an error
-    id: int = Field(description='ID is not needed on create', default=None) # added field validation as well as optional type
+    id: int = Field(description='ID is not needed on create', default=None)
     title: str = Field(min_length=3)
     author: str = Field(min_length=1)
     description: str = Field(min_length=1, max_length=300)
     rating: int = Field(gt=-1, lt=6)  # 0 to 5
     published_date: int = Field(gt=1990, lt=2400)   
-
-
-
-
-    # model_config  (for swagger docs example section)
 
     model_config = {
         "json_schema_extra": {
@@ -65,23 +51,8 @@ Book(4, 'Physics Volume 1', 'HC Verma', 'Used by millions of students preparing 
 Book(5, 'Algebra', 'G Tewani', 'A mathematics book of the famous series by G Tewani', 4, 2010),
 Book(6, 'Do Epic Shit', 'Ankur Warikoo', 'A great book by Ankur Warikoo', 4, 2020),
 Book(7, 'Get Epic Shit Done', 'Ankur Warikoo', 'Another great book by Ankur Warikoo', 4, 2019)
-
 ]
 
-
-
-
-@app.get("/")
-async def index():
-    return {"message": "Welcome to the page!"}
-
-
-@app.get("/books")
-async def read_all_books():
-    return BOOKS
-
-
-        
 
 @app.get("/books/publish")   # assignment solution
 async def books_by_publish_date(published_date: int = Query(gt=1900, lt=2400)):
@@ -92,16 +63,13 @@ async def books_by_publish_date(published_date: int = Query(gt=1900, lt=2400)):
     return books_to_return
 
 
-# validation inside path parameter
 @app.get("/books/{book_id}")
 async def show_book_by_id(book_id: int = Path(gt=0, lt=100)):
     for book in BOOKS:
         if book.id == book_id:
             return book
-    raise HTTPException(status_code=404, detail= "Item not found")
-    
+    raise HTTPException(status_code=404, detail= "Item not found")  # executed only if no book matches the condition
 
-# fetching book by query parameter id
 
 @app.get("/books/")   # here the order does not cause much harm as this endpoint uses query parameter
 async def show_book_by_rating(rating:int = Query(lt=6, gt=-1)):
@@ -112,16 +80,6 @@ async def show_book_by_rating(rating:int = Query(lt=6, gt=-1)):
     return books_to_return
         
 
-
-
-
-# @app.post("/create-book")
-# async def create_books(book_request: BookRequest):
-#     print(type(book_request))              # class <class 'books.BookRequest'>
-#     BOOKS.append(book_request)  
-
-
-# the above part also works, but the below is better:
 
 @app.post("/create-book")
 async def create_book(book_request: BookRequest):
@@ -138,9 +96,6 @@ def find_book_id(book: Book):   # not async     (for auto-increment of IDs)
 
     book.id = 1 if len(BOOKS) == 0 else BOOKS[-1].id + 1 
     return book
-
-
-
 
 
 @app.put("/books/update_book")
