@@ -1,0 +1,6 @@
+Just like psycopg2-binary is a driver for postgres database, pymysql is a database driver for mysql
+
+connection with mysql database: 
+
+SQLALCHEMY_DATABASE_URL="mysql+pymysql://root:mayank1309@127.0.0.1:3306/TodoApplicationDatabase"
+

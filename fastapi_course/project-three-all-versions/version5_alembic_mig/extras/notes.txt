@@ -1,0 +1,13 @@
+1. install alembic: pip install alembic
+2. alembic init <folder name>    | initializes a new, generic environment
+3. alembic revision -m <message>   | creates a new revision of the environment
+4. alembic upgrade <revision #>    | run our upgrade migration to our database
+5. alembic downgrade -1     | run our downgrade migration to our database
+
+
+
+____________
+
+after we initialize our project with alembic, two new items will appear  in our directory
+  1. alembic.ini
+  2. alembic   (directory)
